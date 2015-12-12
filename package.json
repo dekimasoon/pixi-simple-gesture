@@ -1,0 +1,22 @@
+{
+  "name": "pixi-simple-gesture",
+  "version": "0.0.1",
+  "description": "Add Pinch, Pan gesture support to sprites of pixi.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dekimasoon/pixi-simple-gesture.git"
+  },
+  "keywords": [
+    "pixi.js"
+  ],
+  "author": "dekimasoon",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dekimasoon/pixi-simple-gesture/issues"
+  },
+  "homepage": "https://github.com/dekimasoon/pixi-simple-gesture#readme"
+}
