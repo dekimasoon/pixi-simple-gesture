@@ -1,14 +1,4 @@
-
-/**
- * 渡されたspriteをPanに対応させる(Click, Touchの両方に対応)
- * 適切なタイミングでonPanStart, onPanMove, onPanEndのそれぞれを呼び出す
- * @param sprite
- */
 export default function panable (sprite) {
-  /**
-   * クリック/タッチの開始時に呼ばれる
-   * @param e
-   */
   function start (e) {
     if (e.target._pan) {
       return
@@ -23,21 +13,10 @@ export default function panable (sprite) {
       .on('touchmove', touchMove)
   }
 
-  /**
-   * クリックの移動中に呼ばれる
-   * @param e
-   */
   function mouseMove (e) {
     move(e, e.data.originalEvent)
   }
 
-  /**
-   * タッチの移動中に呼ばれる
-   *
-   * シングルタッチかどうか判断する
-   * マルチタッチの場合はend()を呼ぶ
-   * @param e
-   */
   function touchMove (e) {
     let t = e.data.originalEvent.targetTouches
     if (!t || t.length > 1) {
@@ -47,18 +26,6 @@ export default function panable (sprite) {
     move(e, t[0])
   }
 
-  /**
-   * クリック/タッチの移動中に呼ばれる。Pan動作か判断し必要であれば各ハンドラを呼ぶ
-   *
-   * 1. 初回ではない
-   * 2. 12ms以上経過している
-   * 以上を満たしている場合deltaX,deltaY,velocityを計算しonTapMoveに渡す
-   * 上記3値の計算に必要な値（x,y,date）は初回と前回分を
-   * target._pan.p/ppに保管し次回以降の計算に利用する
-   * また初回の場合は、onPanStartを呼ぶ
-   * @param e
-   * @param c
-   */
   function move (e, c) {
     if (!e.target._pan.isPanning) {
       return
@@ -89,17 +56,7 @@ export default function panable (sprite) {
     e.target._pan.p = { x: c.clientX, y: c.clientY, date: now }
   }
 
-  /**
-   * クリック、タッチの終了時に呼ばれる
-   *
-   * isPanningであればpanを終了
-   * start()で予約したtimerが未実行(isPanningでない)の場合はtimerをキャンセル
-   * TODO:
-   * target._pan.p/ppを用いてvelocityを計算する。
-   * velocityが閾値以上だった場合は慣性スクロール用の処理を行う
-   * 上記のあとonPanEndを呼ぶ。
-   * @param e
-   */
+  // TODO: Inertia Mode
   function end (e) {
     if (!e.target._pan) {
       return

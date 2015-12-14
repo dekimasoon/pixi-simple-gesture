@@ -1,7 +1,7 @@
 {
   "name": "pixi-simple-gesture",
-  "version": "0.0.1",
-  "description": "Add Pinch, Pan gesture support to sprites of pixi.js",
+  "version": "0.1.0",
+  "description": "Add Pinch, Pan gesture support to pixi.js sprites",
   "main": "lib/index.js",
   "files": [
     "lib",
