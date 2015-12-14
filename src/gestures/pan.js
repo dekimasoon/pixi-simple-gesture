@@ -1,7 +1,7 @@
+
 /**
  * 渡されたspriteをPanに対応させる(Click, Touchの両方に対応)
  * 適切なタイミングでonPanStart, onPanMove, onPanEndのそれぞれを呼び出す
- * spriteにはonPanMoveが必ず設定されている必要がある
  * @param sprite
  */
 export default function panable (sprite) {
@@ -10,6 +10,14 @@ export default function panable (sprite) {
    * @param e
    */
   function start (e) {
+    if (e.target._pan) {
+      return
+    }
+    e.target._pan = {}
+    e.target._pan.timer = setTimeout(() => {
+      e.target.emit('panstart')
+      e.target._pan.isPanning = true
+    }, 60)
     e.target
       .on('mousemove', mouseMove)
       .on('touchmove', touchMove)
@@ -27,11 +35,13 @@ export default function panable (sprite) {
    * タッチの移動中に呼ばれる
    *
    * シングルタッチかどうか判断する
+   * マルチタッチの場合はend()を呼ぶ
    * @param e
    */
   function touchMove (e) {
     let t = e.data.originalEvent.targetTouches
     if (!t || t.length > 1) {
+      end(e)
       return
     }
     move(e, t[0])
@@ -50,14 +60,12 @@ export default function panable (sprite) {
    * @param c
    */
   function move (e, c) {
-    if (!e.target._pan) {
-      e.target._pan = {
-        p: { x: c.clientX, y: c.clientY, date: new Date() },
-        pp: {}
-      }
-      if (typeof e.target.onPanStart === 'function') {
-        e.target.onPanStart()
-      }
+    if (!e.target._pan.isPanning) {
+      return
+    }
+    if (!e.target._pan.p) {
+      e.target._pan.p = { x: c.clientX, y: c.clientY, date: new Date() }
+      e.target._pan.pp = {}
       return
     }
     let now = new Date()
@@ -74,7 +82,7 @@ export default function panable (sprite) {
       velocity: distance / interval,
       data: e.data
     }
-    e.target.onPanMove(event)
+    e.target.emit('panmove', event)
     e.target._pan.pp.x = e.target._pan.p.x
     e.target._pan.pp.y = e.target._pan.p.y
     e.target._pan.pp.date = e.target._pan.p.date
@@ -84,6 +92,8 @@ export default function panable (sprite) {
   /**
    * クリック、タッチの終了時に呼ばれる
    *
+   * isPanningであればpanを終了
+   * start()で予約したtimerが未実行(isPanningでない)の場合はtimerをキャンセル
    * TODO:
    * target._pan.p/ppを用いてvelocityを計算する。
    * velocityが閾値以上だった場合は慣性スクロール用の処理を行う
@@ -91,8 +101,13 @@ export default function panable (sprite) {
    * @param e
    */
   function end (e) {
-    if (e.target._pan && typeof e.target.onPanEnd === 'function') {
-      e.target.onPanEnd()
+    if (!e.target._pan) {
+      return
+    }
+    if (e.target._pan.isPanning) {
+      e.target.emit('panend')
+    } else {
+      clearTimeout(e.target._pan.timer)
     }
     e.target._pan = null
     e.target

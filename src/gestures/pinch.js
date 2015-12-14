@@ -2,7 +2,6 @@
  * 渡されたspriteをPinchに対応させる(Touchのみ。Wheelイベントには非対応)
  * 適切なタイミングでonPinchStart, onPinchMove, onPinchEndのそれぞれを
  * 呼び出すように設定する
- * spriteにはonPinchMoveが必ず設定されている必要がある
  * @param sprite
  */
 export default function pinchable (sprite) {
@@ -39,9 +38,7 @@ export default function pinchable (sprite) {
         p: { distance: distance, date: new Date() },
         pp: {}
       }
-      if (typeof e.target.onPinchStart === 'function') {
-        e.target.onPinchStart()
-      }
+      e.target.emit('pinchstart')
       return
     }
     let now = new Date()
@@ -54,7 +51,7 @@ export default function pinchable (sprite) {
       velocity: distance / interval,
       data: e.data
     }
-    e.target.onPinchMove(event)
+    e.target.emit('pinchmove', event)
     e.target._pinch.pp.distance = e.target._pinch.p.distance
     e.target._pinch.pp.date = e.target._pinch.p.date
     e.target._pinch.p = { distance: distance, date: now }
@@ -70,8 +67,8 @@ export default function pinchable (sprite) {
    * @param e
    */
   function end (e) {
-    if (e.target._pinch && typeof e.target.onPinchEnd === 'function') {
-      e.target.onPinchEnd()
+    if (e.target._pinch) {
+      e.target.emit('pinchend')
     }
     e.target._pinch = null
     e.target.removeListener('touchmove', move)
