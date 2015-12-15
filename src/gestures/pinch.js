@@ -35,9 +35,14 @@ export default function pinchable (sprite) {
       data: e.data
     }
     e.target.emit('pinchmove', event)
-    e.target._pinch.pp.distance = e.target._pinch.p.distance
-    e.target._pinch.pp.date = e.target._pinch.p.date
-    e.target._pinch.p = { distance: distance, date: now }
+    e.target._pinch.pp = {
+      distance: e.target._pinch.p.distance,
+      date: e.target._pinch.p.date
+    }
+    e.target._pinch.p = {
+      distance: distance,
+      date: now
+    }
   }
 
   // TODO: Inertia Mode
