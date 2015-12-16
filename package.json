@@ -1,6 +1,6 @@
 {
   "name": "pixi-simple-gesture",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Add Pinch, Pan, Tap gesture support to pixi.js sprites",
   "main": "lib/index.js",
   "files": [
@@ -17,7 +17,7 @@
     "url": "git+https://github.com/dekimasoon/pixi-simple-gesture.git"
   },
   "keywords": [
-    "pixi.js"
+    "pixi.js", "pixijs", "pixi"
   ],
   "author": "dekimasoon",
   "license": "MIT",
