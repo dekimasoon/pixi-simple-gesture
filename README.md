@@ -72,7 +72,7 @@ The 'panmove' handler receives an event object containing the following properti
 var gesture = require('pixi-simple-gesture')
 
 var sprite = new PIXI.Sprite(texture)
-gesture.tapable(sprite)
+gesture.tappable(sprite)
 
 sprite.on('simpletap', function() {
   console.log('simply tapped')

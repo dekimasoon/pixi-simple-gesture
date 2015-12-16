@@ -1,4 +1,4 @@
-export default function tapable (sprite) {
+export default function tappable (sprite) {
   function mouseDown (e) {
     start(e, e.data.originalEvent)
   }
