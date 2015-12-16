@@ -1,5 +1,5 @@
 # pixi-simple-gesture
-Add Pinch, Pan gesture support to pixi.js sprites.
+Add Pinch, Pan, Tap gesture support to pixi.js sprites.
 
 ```
 npm install --save pixi-simple-gesture
@@ -16,7 +16,7 @@ var sprite = new PIXI.Sprite(texture)
 gesture.pinchable(sprite)
 
 sprite.on('pinchstart', function() {
-  console.log('pi nch start')
+  console.log('pinch start')
 })
 
 sprite.on('pinchmove', function(event) {
@@ -30,11 +30,12 @@ sprite.on('pinchend', function() {
 
 The 'pinchmove' handler receives an event object containing the following properties.
 
-| Name    | Value                          |
-|:--------|:-------------------------------|
-| scale   | Scaling that has been done     |
-| velocity| Velocity in px/ms              |
-| center  | Center position for multi-touch|
+| Name    | Value                                 |
+|:--------|:--------------------------------------|
+| scale   | Scaling that has been done            |
+| velocity| Velocity in px/ms                     |
+| center  | Center position for multi-touch       |
+| data    | Original InteractionData from pixi.js |
 
 ### Pan
 
@@ -59,13 +60,38 @@ sprite.on('panend', function() {
 
 The 'panmove' handler receives an event object containing the following properties.
 
-| Name    | Value                          |
-|:--------|:-------------------------------|
-| deltaX  | Movement of the X axis         |
-| deltaY  | Movement of the Y axis         |
-| velocity| Velocity in px/ms              |
+| Name    | Value                                 |
+|:--------|:--------------------------------------|
+| deltaX  | Movement of the X axis                |
+| deltaY  | Movement of the Y axis                |
+| velocity| Velocity in px/ms                     |
+| data    | Original InteractionData from pixi.js |
+
+### Tap
+```js
+var gesture = require('pixi-simple-gesture')
+
+var sprite = new PIXI.Sprite(texture)
+gesture.tapable(sprite)
+
+sprite.on('simpletap', function() {
+  console.log('simply tapped')
+})
+```
+
+NOT 'tap', **simpletap**. Because 'tap' is already used by pixi.js. This 'simpletap' works a bit better with 'pinch' and 'pan'.  The Handler receives an event object containing the following properties.
+
+| Name    | Value                                 |
+|:--------|:--------------------------------------|
+| data    | Original InteractionData from pixi.js |
+
+
+## Note
+
+Any requests, issues, PRs are welcome!
 
 
 ### TODO
 
 - Add Inertia Mode
+- Add Complex? Tap, emits 'tapstart', 'tapcancel', 'tapend'. Could be useful to implement UI components which has active state style.
