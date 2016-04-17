@@ -9,16 +9,16 @@ export default function tappable (sprite) {
 
   // possibly be called twice or more
   function start (e, t) {
-    if (e.target._tap) {
+    if (sprite._tap) {
       return
     }
-    e.target._tap = {
+    sprite._tap = {
       p: {
         x: t.clientX,
         y: t.clientY
       }
     }
-    e.target
+    sprite
       .on('mousemove', mouseMove)
       .on('touchmove', touchMove)
   }
@@ -30,7 +30,7 @@ export default function tappable (sprite) {
   function touchMove (e) {
     let t = e.data.originalEvent.targetTouches
     if (!t || t.length > 1) {
-      e.target._tap.canceled = true
+      sprite._tap.canceled = true
       end(e)
       return
     }
@@ -38,25 +38,25 @@ export default function tappable (sprite) {
   }
 
   function move (e, t) {
-    let dx = t.clientX - e.target._tap.p.x
-    let dy = t.clientY - e.target._tap.p.y
+    let dx = t.clientX - sprite._tap.p.x
+    let dy = t.clientY - sprite._tap.p.y
     let distance = Math.sqrt(dx * dx + dy * dy)
     let threshold = (t instanceof window.MouseEvent) ? 2 : 7
     if (distance > threshold) {
-      e.target._tap.canceled = true
+      sprite._tap.canceled = true
     }
   }
 
   // possibly be called twice or more
   function end (e) {
-    if (e.target._tap && !e.target._tap.canceled) {
+    if (sprite._tap && !sprite._tap.canceled) {
       let event = {
         data: e.data
       }
-      e.target.emit('simpletap', event)
+      sprite.emit('simpletap', event)
     }
-    e.target._tap = null
-    e.target
+    sprite._tap = null
+    sprite
       .removeListener('mousemove', mouseMove)
       .removeListener('touchmove', touchMove)
   }
