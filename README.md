@@ -13,7 +13,9 @@ npm install --save pixi-simple-gesture
 var gesture = require('pixi-simple-gesture')
 
 var sprite = new PIXI.Sprite(texture)
-gesture.pinchable(sprite)
+var inertiaMode = true
+
+gesture.pinchable(sprite, inertiaMode)
 
 sprite.on('pinchstart', function() {
   console.log('pinch start')
@@ -41,9 +43,10 @@ The 'pinchmove' handler receives an event object containing the following proper
 
 ```js
 var gesture = require('pixi-simple-gesture')
+var inertiaMode = true
 
 var sprite = new PIXI.Sprite(texture)
-gesture.panable(sprite)
+gesture.panable(sprite, inertiaMode)
 
 sprite.on('panstart', function() {
   console.log('pan start')
